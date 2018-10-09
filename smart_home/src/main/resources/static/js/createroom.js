@@ -149,6 +149,8 @@ $(document).ready(function(){
 	function roomDetail(roomDetailCount){
 		$(".detail"+roomDetailCount).click(function(){
 			$(".roomName").html($(".nameroom"+ roomDetailCount).val());
+			upAndDown();
+			
 		});
 	}
 
@@ -156,6 +158,71 @@ $(document).ready(function(){
 		$(".btn-ok").click(function(){
 			addcomponent();
 		});
+	}
+
+	function upAndDown(){
+		$("#btn-up2, #btn-up3, #btn-up4, #btn-up5, #btn-up6, #btn-up7").click(function(){
+			
+			var btnid = $(this).attr("id");
+			// alert(testid);
+			if(btnid == "btn-up2"){
+				setGetValue("HD", 1);
+			}
+			else if(btnid == "btn-up3") {
+				setGetValue("TD", 1);
+			}
+			else if(btnid == "btn-up4") {
+				setGetValue("AC", 1);
+			}
+			else if(btnid == "btn-up5") {
+				setGetValue("HE", 1);
+			}
+			else if(btnid == "btn-up6") {
+				setGetValue("Ne", 1);
+			}
+			else if(btnid == "btn-up7") {
+				setGetValue("De", 1);
+			}
+			
+		});
+
+		$("#btn-down2, #btn-down3, #btn-down4, #btn-down5, #btn-down6, #btn-down7").click(function(){
+			
+			var btnid = $(this).attr("id");
+			// alert(testid);
+			if(btnid == "btn-down2"){
+				setGetValue("HD", 0);
+			}
+			else if(btnid == "btn-down3") {
+				setGetValue("TD", 0);
+			}
+			else if(btnid == "btn-down4") {
+				setGetValue("AC", 0);
+			}
+			else if(btnid == "btn-down5") {
+				setGetValue("HE", 0);
+			}
+			else if(btnid == "btn-down6") {
+				setGetValue("Ne", 0);
+			}
+			else if(btnid == "btn-down7") {
+				setGetValue("De", 0);
+			}
+			
+		});
+
+	}
+
+	function setGetValue(nametag, number){
+		var value = $("."+nametag).val();
+		if(number == 1){
+			value++;
+		}
+		else if (value >1){
+			value--;
+				
+		}
+		$("."+nametag).val(value);
 	}
 
   	$(".add-btn").click(function(){
