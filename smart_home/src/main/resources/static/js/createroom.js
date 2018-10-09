@@ -1,8 +1,10 @@
 $(document).ready(function(){
+
 	$(".roomDetail").load("detailroom.html");
 	$(".tableDecive").load("componentroom.html", function(){
-		saveDeviceHome();
+		getDeviceHome();
 	});
+
 	var getNameHome = localStorage.getItem("storageNameHome");
 	var dataHome;
 	var status_create;
@@ -11,6 +13,7 @@ $(document).ready(function(){
 	var listRoom;
 	var nameRoom;
 	var idRoom;
+
 	$(".room-table").hide();
 
 	//Begin get home
@@ -54,11 +57,6 @@ $(document).ready(function(){
 	  				+ "<input placeholder='Room Name' type='text' id='nameroom' class='form-control nameroom"+countRoom+"'>"
 	  				+ "<input type='hidden' class='form-control idroom"+countRoom+"'>"
   				+ "</td>"
-
-  				// + "<td class = 'componentcol"+countRoom+"'>"
-  				// 	+ "<a class='trigger info-color text-white addDevice"+countRoom+"' data-toggle='modal' data-target='.tableDecive'>Add<i class='fa fa-plus ml-2'></i></a>"
-  				// + "</td>"
-
   				+ "<td class = 'componentcol"+countRoom+"'>"
   					+ "<a class='trigger info-color text-white detail"+countRoom+"' data-toggle='modal' data-target='.roomDetail'>Detail<i class='fa'></i></a>"
   				+ "</td>"
@@ -78,7 +76,7 @@ $(document).ready(function(){
 	function deleteRoom(deleteCountRoom){
 		$(".delete-btn"+deleteCountRoom).click(function(){
 			nameRoom = $(".nameroom"+ deleteCountRoom).val();
-			idRoom = idRoom = parseInt($(".idroom"+ deleteCountRoom).val());
+			idRoom = parseInt($(".idroom"+ deleteCountRoom).val());
 			$(".row"+deleteCountRoom).remove();
 			
 
@@ -135,16 +133,6 @@ $(document).ready(function(){
 		$(".idroom"+getRoomCount).val(dataRoomGet.id);
 	}
 
-	function addcomponent(){
-		var chkArray = [];
-		$(".component-check:checked").each(function(){
-			chkArray.push($(this).val());
-		});
-		// alert(chkArray);
-		var selected;
-		selected = chkArray.join(',') ;
-		alert(selected);
-	}
 
 	function roomDetail(roomDetailCount){
 		$(".detail"+roomDetailCount).click(function(){
@@ -154,73 +142,94 @@ $(document).ready(function(){
 		});
 	}
 
-	function saveDeviceHome(){
+	function getDeviceHome(){
 		$(".btn-ok").click(function(){
 			addcomponent();
 		});
 	}
 
-	function upAndDown(){
-		$("#btn-up2, #btn-up3, #btn-up4, #btn-up5, #btn-up6, #btn-up7").click(function(){
-			
-			var btnid = $(this).attr("id");
-			// alert(testid);
-			if(btnid == "btn-up2"){
-				setGetValue("HD", 1);
-			}
-			else if(btnid == "btn-up3") {
-				setGetValue("TD", 1);
-			}
-			else if(btnid == "btn-up4") {
-				setGetValue("AC", 1);
-			}
-			else if(btnid == "btn-up5") {
-				setGetValue("HE", 1);
-			}
-			else if(btnid == "btn-up6") {
-				setGetValue("Ne", 1);
-			}
-			else if(btnid == "btn-up7") {
-				setGetValue("De", 1);
-			}
-			
+	function addcomponent(){
+		var chkArray = [];
+		$(".component-check:checked").each(function(){
+			chkArray.push($(this).val());
 		});
-
-		$("#btn-down2, #btn-down3, #btn-down4, #btn-down5, #btn-down6, #btn-down7").click(function(){
-			
-			var btnid = $(this).attr("id");
-			// alert(testid);
-			if(btnid == "btn-down2"){
-				setGetValue("HD", 0);
+		$.each( chkArray, function(index, value){
+			switch(value){
+				case 'Humidity Device':
+					//create a DH device for room
+					break;
+				case 'Temperature Device':
+					break;
+				case 'Air-Conditioner':
+					break;
+				case 'Heating Equipment':
+					break;
+				case 'Nebulizer':
+					break;
+				case 'Dehumidifier':
+					break;
 			}
-			else if(btnid == "btn-down3") {
-				setGetValue("TD", 0);
-			}
-			else if(btnid == "btn-down4") {
-				setGetValue("AC", 0);
-			}
-			else if(btnid == "btn-down5") {
-				setGetValue("HE", 0);
-			}
-			else if(btnid == "btn-down6") {
-				setGetValue("Ne", 0);
-			}
-			else if(btnid == "btn-down7") {
-				setGetValue("De", 0);
-			}
-			
 		});
-
 	}
 
-	function setGetValue(nametag, number){
+	function addHumidityDevice(nameHumidityDevice){
+		
+	}
+
+	function upAndDown(){
+		$("#btn-up-humidityDevice, #btn-up-temperatureDevice, #btn-up-airConditioner, #btn-up-heatingEquipment, #btn-up-nebulizer, #btn-up-dehumidifier").click(function(){
+			switch($(this).attr("id")){
+				case 'btn-up-humidityDevice':
+					setGetValue("humidityDevice", 1);
+					break;
+				case 'btn-up-temperatureDevice':
+					setGetValue("temperatureDevice", 1);
+					break;
+				case 'btn-up-airConditioner':
+					setGetValue("airConditioner", 1);
+					break;
+				case 'btn-up-heatingEquipment':
+					setGetValue("heatingEquipment", 1);
+					break;
+				case 'btn-up-nebulizer':
+					setGetValue("nebulizer", 1);
+					break;
+				case 'btn-up-dehumidifier':
+					setGetValue("dehumidifier", 1);
+					break;
+			}
+		});
+		$("#btn-down-humidityDevice, #btn-down-temperatureDevice, #btn-down-airConditioner, #btn-down-heatingEquipment, #btn-down-nebulizer, #btn-down-dehumidifier").click(function(){
+			switch($(this).attr("id")){
+				case 'btn-down-humidityDevice':
+					setGetValue("humidityDevice", 0);
+					break;
+				case 'btn-down-temperatureDevice':
+					setGetValue("temperatureDevice", 0);
+					break;
+				case 'btn-down-airConditioner':
+					setGetValue("airConditioner", 0);
+					break;
+				case 'btn-down-heatingEquipment':
+					setGetValue("heatingEquipment", 0);
+					break;
+				case 'btn-down-nebulizer':
+					setGetValue("nebulizer", 0);
+					break;
+				case 'btn-down-dehumidifier':
+					setGetValue("dehumidifier", 0);
+					break;
+			}
+		});
+	}
+
+	function setGetValue(nametag, checkupdown){
 		var value = $("."+nametag).val();
-		if(number == 1){
+		if(checkupdown == 1){
 			value++;
 		}
 		else if (value >1){
 			value--;
-				
 		}
 		$("."+nametag).val(value);
 	}
@@ -230,7 +239,7 @@ $(document).ready(function(){
  		saveRoom(loadRoom + 1);
  		deleteRoom(loadRoom + 1);
  		roomDetail(loadRoom + 1);
- 		saveDeviceHome();
+ 		getDeviceHome();
 		loadRoom++;
   	});
 });
