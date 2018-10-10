@@ -51,21 +51,22 @@ $(document).ready(function(){
 
 
 	function appendRoom(countRoom){
-  		$("tbody").append(
+  		$(".table-room").append(
   			"<tr class = 'row"+countRoom+"'>"
-  				+ "<td class = 'roomnamecol"+countRoom+"'>"
+  				+ "<td class = 'roomnamecol'>"
 	  				+ "<input placeholder='Room Name' type='text' id='nameroom' class='form-control nameroom"+countRoom+"'>"
-	  				+ "<input type='hidden' class='form-control idroom"+countRoom+"'>"
+	  				+ "<input type='hidden' class='idroom"+countRoom+"'>"
   				+ "</td>"
-  				+ "<td class = 'componentcol"+countRoom+"'>"
+
+  				+ "<td class = 'componentcol'>"
   					+ "<a class='trigger info-color text-white detail"+countRoom+"' data-toggle='modal' data-target='.roomDetail'>Detail<i class='fa'></i></a>"
   				+ "</td>"
 
-  				+ "<td class = 'homenamecol"+countRoom+"'>"
+  				+ "<td class = 'homenamecol'>"
   					+ "<p class = 'homename'>"+getNameHome+"</p>"
   				+ "</td>"
 
-  				+ "<td class = 'closecol"+countRoom+"'>"
+  				+ "<td class = 'closecol'>"
 	  				+ "<a><i class='fa fa-save mx-1 save-btn"+countRoom+"'></i></a>"
 	  				+ "<a><i class='fa fa-times mx-1 delete-btn"+countRoom+"'></i></a>"
   				+ "</td>"
@@ -144,36 +145,76 @@ $(document).ready(function(){
 
 	function getDeviceHome(){
 		$(".btn-ok").click(function(){
-			addcomponent();
-		});
-	}
-
-	function addcomponent(){
-		var chkArray = [];
-		$(".component-check:checked").each(function(){
-			chkArray.push($(this).val());
-		});
-		$.each( chkArray, function(index, value){
-			switch(value){
-				case 'Humidity Device':
-					//create a DH device for room
-					break;
-				case 'Temperature Device':
-					break;
-				case 'Air-Conditioner':
-					break;
-				case 'Heating Equipment':
-					break;
-				case 'Nebulizer':
-					break;
-				case 'Dehumidifier':
-					break;
+			if(($('.Device tr').length - 1)>0){
+				addcomponent($('.Device tr').length - 1);
+			}else{
+				addcomponent(0);
 			}
 		});
 	}
 
-	function addHumidityDevice(nameHumidityDevice){
-		
+	function addcomponent(deviceCount){
+		var componentArray = [];
+		$(".component-check:checked").each(function(){
+			var deviceNumber = $(("#"+$(this).val()).replace(/ /g, '')).val();
+			while(deviceNumber>0){
+				componentArray.push($(this).val());
+				deviceNumber--;
+			};
+			$(".component-check").prop('checked', false);
+		});
+		$.each(componentArray, function(index, value){
+			switch(value){
+				case 'Humidity Device':
+					addDevice(value, deviceCount, 0, 25 , "disabled");
+					break;
+				case 'Temperature Device':
+					addDevice(value, deviceCount, 35, 0, "disabled");
+					break;
+				case 'Air-Conditioner':
+					addDevice(value, deviceCount, 0, 0, "disabled");
+					break;
+				case 'Heating Equipment':
+					addDevice(value, deviceCount, 0, 0, "disabled");
+					break;
+				case 'Nebulizer':
+					addDevice(value, deviceCount, 0, 0, "disabled");
+					break;
+				case 'Dehumidifier':
+					addDevice(value, deviceCount, 0, 0, "disabled");
+					break;
+			}
+			deviceCount++;
+		});
+	}
+
+
+	function addDevice(deviceName, deviceCount, temperature, humidity, state){
+		$(".roomDetailTable").append(
+  			"<tr class = 'row"+deviceCount+"'>"
+  				+ "<td class = 'deviceNameCol'>"
+	  				+ "<input type='text' value = '"+deviceName+"' id='devicesName' class='form-control deviceName"+deviceCount+"'>"
+	  				+ "<input type='hidden' class='IPDevice"+deviceCount+"'>"
+  				+ "</td>"
+  				+ "<td class = 'temperatureCol'>"
+  					+ "<p class = 'temperature'>"+temperature+"</p>"
+  				+ "</td>"
+
+  				+ "<td class = 'humidityCol'>"
+  					+ "<p class = 'humidity'>"+humidity+"</p>"
+  				+ "</td>"
+
+  				+ "<td class = 'stateCol'>"
+	  				+ "<lable class='bs-switch'>"
+	  					+ "<input type = 'checkbox' "+state+">"
+	  					+ "<span class = 'slider round'></span>"
+	  				+ "</lable>"
+  				+ "</td>"
+
+  				+ "<td class = 'closecol'>"
+	  				+ "<a><i class='fa fa-times mx-1 delete-btn"+deviceCount+"'></i></a>"
+  				+ "</td>"
+  			+"</tr>");
 	}
 
 	function upAndDown(){
@@ -223,15 +264,15 @@ $(document).ready(function(){
 		});
 	}
 
-	function setGetValue(nametag, checkupdown){
-		var value = $("."+nametag).val();
+	function setGetValue(nameDecive, checkupdown){
+		var value = $("."+nameDecive).val();
 		if(checkupdown == 1){
 			value++;
 		}
 		else if (value >1){
 			value--;
 		}
-		$("."+nametag).val(value);
+		$("."+nameDecive).val(value);
 	}
 
   	$(".add-btn").click(function(){
