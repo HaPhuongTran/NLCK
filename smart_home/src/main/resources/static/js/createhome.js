@@ -10,7 +10,7 @@ $(document).ready(function(){
 			method: "post",
 			data: JSON.stringify({ nameHome:nameHome }),
 			contentType: "application/json",
-			url: "http://localhost:8080/smarthome/createhome/"
+			url: "http://localhost:8080/smarthome/createhome"
 		}).done(function(data, textStatus, xhr){
 			status_create = xhr.status;
 		});

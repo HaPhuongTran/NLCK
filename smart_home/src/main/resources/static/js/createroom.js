@@ -166,22 +166,28 @@ $(document).ready(function(){
 		$.each(componentArray, function(index, value){
 			switch(value){
 				case 'Humidity Device':
-					addDevice(value, deviceCount, 0, 25 , "disabled");
+					addDevice(value, deviceCount, 0, 25, "checked");
+					controlDevice(deviceCount);
 					break;
 				case 'Temperature Device':
-					addDevice(value, deviceCount, 35, 0, "disabled");
+					addDevice(value, deviceCount, 35, 0, "checked");
+					controlDevice(deviceCount);
 					break;
 				case 'Air-Conditioner':
-					addDevice(value, deviceCount, 0, 0, "disabled");
+					addDevice(value, deviceCount, 0, 0, "");
+					controlDevice(deviceCount);
 					break;
 				case 'Heating Equipment':
-					addDevice(value, deviceCount, 0, 0, "disabled");
+					addDevice(value, deviceCount, 0, 0, "");
+					controlDevice(deviceCount);
 					break;
 				case 'Nebulizer':
-					addDevice(value, deviceCount, 0, 0, "disabled");
+					addDevice(value, deviceCount, 0, 0, "");
+					controlDevice(deviceCount);
 					break;
 				case 'Dehumidifier':
-					addDevice(value, deviceCount, 0, 0, "disabled");
+					addDevice(value, deviceCount, 0, 0, "");
+					controlDevice(deviceCount);               
 					break;
 			}
 			deviceCount++;
@@ -193,7 +199,7 @@ $(document).ready(function(){
 		$(".roomDetailTable").append(
   			"<tr class = 'row"+deviceCount+"'>"
   				+ "<td class = 'deviceNameCol'>"
-	  				+ "<input type='text' value = '"+deviceName+"' id='devicesName' class='form-control deviceName"+deviceCount+"'>"
+	  				+ "<input type='text' placeholder = '"+deviceName+"' id='devicesName' class='form-control deviceName"+deviceCount+"'>"
 	  				+ "<input type='hidden' class='IPDevice"+deviceCount+"'>"
   				+ "</td>"
   				+ "<td class = 'temperatureCol'>"
@@ -205,8 +211,8 @@ $(document).ready(function(){
   				+ "</td>"
 
   				+ "<td class = 'stateCol'>"
-	  				+ "<lable class='bs-switch'>"
-	  					+ "<input type = 'checkbox' "+state+">"
+	  				+ "<lable class='bs-switch sm-switch"+deviceCount+"'>"
+	  					+ "<input type = 'checkbox' class = 'test"+deviceCount+"' "+state+">"
 	  					+ "<span class = 'slider round'></span>"
 	  				+ "</lable>"
   				+ "</td>"
@@ -215,6 +221,15 @@ $(document).ready(function(){
 	  				+ "<a><i class='fa fa-times mx-1 delete-btn"+deviceCount+"'></i></a>"
   				+ "</td>"
   			+"</tr>");
+	}
+
+	function controlDevice(deviceCount){
+		$(".sm-switch"+deviceCount).click(function(){
+			if($(".test"+deviceCount).is(':checked'))
+				$(".test"+deviceCount).attr("checked", false);
+			else
+				$(".test"+deviceCount).attr("checked", true);
+		});
 	}
 
 	function upAndDown(){
@@ -274,6 +289,21 @@ $(document).ready(function(){
 		}
 		$("."+nameDecive).val(value);
 	}
+
+	// function getTempatureHumidity(){
+		var temperture_humidity;
+		$.ajax({
+			method: "get",
+			url: "http://api.openweathermap.org/data/2.5/weather?q=Ho%20Chi%20Minh%20City,VN&APPID=efe6e214a09caa3cd0319cef3384a9fd&units=metric",
+			async: false,
+			contentType: "application/json"
+		}).done(function(data, textStatus, xhr){
+			var temperHumi = '[{"temperature":"'+data.main.temp+'"}, {"humidity": "'+data.main.humidity+'"}]';
+			temperture_humidity = JSON.parse(temperHumi);
+			alert(temperture_humidity);
+		});
+		return 
+	// }
 
   	$(".add-btn").click(function(){
   		appendRoom(loadRoom + 1);
