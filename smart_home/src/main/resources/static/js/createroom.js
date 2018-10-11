@@ -18,10 +18,10 @@ $(document).ready(function(){
 
 	//Begin get home
 	$.ajax({
-			async : false,
-			method: "get",
-			contentType: "application/json",
-			url: "http://localhost:8080/smarthome/gethome/"+getNameHome,
+		//async : false,
+		method: "get",
+		contentType: "application/json",
+		url: "http://localhost:8080/smarthome/gethome/"+getNameHome,
 	}).done(function(data, textStatus, xhr){
 		dataHome = data;
 	});
@@ -30,15 +30,14 @@ $(document).ready(function(){
 
 	//Begin list room
 	$.ajax({
-			async : false,
-			method: "get",
-			contentType: "application/json",
-			url: "http://localhost:8080/smarthome/getlistrooms/"+ getNameHome,
+		async : false,
+		method: "get",
+		contentType: "application/json",
+		url: "http://localhost:8080/smarthome/getlistrooms/"+ getNameHome,
 	}).done(function(data, textStatus, xhr){
 		listRoom = data;
 	});
 	//End get list room
-
 
 	for(loadRoom; loadRoom < listRoom.length; loadRoom++){
 		appendRoom(loadRoom);
@@ -48,7 +47,6 @@ $(document).ready(function(){
 		deleteRoom(loadRoom);
 		roomDetail(loadRoom);
 	}
-
 
 	function appendRoom(countRoom){
   		$(".table-room").append(
@@ -67,7 +65,7 @@ $(document).ready(function(){
   				+ "</td>"
 
   				+ "<td class = 'closecol'>"
-	  				+ "<a><i class='fa fa-save mx-1 save-btn"+countRoom+"'></i></a>"
+	  				+ "<a><i class='fa fa-save mx-1 btn-saveRoom"+countRoom+"'></i></a>"
 	  				+ "<a><i class='fa fa-times mx-1 delete-btn"+countRoom+"'></i></a>"
   				+ "</td>"
   			+"</tr>");
@@ -80,10 +78,8 @@ $(document).ready(function(){
 			idRoom = parseInt($(".idroom"+ deleteCountRoom).val());
 			$(".row"+deleteCountRoom).remove();
 			
-
 			//Begin delete room
 		    $.ajax({
-				async : false,
 				method: "post",
 				data: JSON.stringify({id: idRoom, nameRoom:nameRoom }),
 				contentType: "application/json",
@@ -95,9 +91,8 @@ $(document).ready(function(){
 		});
 	}
 
-
 	function saveRoom(saveCount){
-		$(".save-btn"+saveCount).click(function(){
+		$(".btn-saveRoom"+saveCount).click(function(){
   			nameRoom = $(".nameroom"+ saveCount).val();
   			idRoom = parseInt($(".idroom"+ saveCount).val());
   			if(isNaN(idRoom)|| idRoom == null){
@@ -105,7 +100,6 @@ $(document).ready(function(){
   			}
   			//Begin create room
 		    $.ajax({
-				async : false,
 				method: "post",
 				data: JSON.stringify({ id: idRoom, homeId:dataHome, nameRoom:nameRoom }),
 				contentType: "application/json",
@@ -118,6 +112,18 @@ $(document).ready(function(){
 		});
 	}
 
+	function saveDevice(){
+		$(".btn-saveDevice").click(function(){
+
+		});
+	}
+	//tomorrow
+	// function deleteDevice(deviceCount){
+	// 	$(".delete-btn"+deviceCount).click(function(){
+	// 		$(".device"+deviceCount).remove();
+	// 	});
+	// }
+
 
 	function getRoom(getRoomCount){
 	    $.ajax({
@@ -128,7 +134,6 @@ $(document).ready(function(){
 		}).done(function(data, textStatus, xhr){
 			dataRoomGet = data;
 		});
-		
 		// Set value for fields value 
 		$(".nameroom"+getRoomCount).val(dataRoomGet.nameRoom);
 		$(".idroom"+getRoomCount).val(dataRoomGet.id);
@@ -139,7 +144,6 @@ $(document).ready(function(){
 		$(".detail"+roomDetailCount).click(function(){
 			$(".roomName").html($(".nameroom"+ roomDetailCount).val());
 			upAndDown();
-			
 		});
 	}
 
@@ -163,31 +167,38 @@ $(document).ready(function(){
 			};
 			$(".component-check").prop('checked', false);
 		});
+		var test = getTempatureHumidity();
 		$.each(componentArray, function(index, value){
 			switch(value){
 				case 'Humidity Device':
-					addDevice(value, deviceCount, 0, 25, "checked");
+					addDevice(value, deviceCount, 0, test[0].temperature , "checked");
 					controlDevice(deviceCount);
+					deleteDevice(deviceCount-1);
 					break;
 				case 'Temperature Device':
-					addDevice(value, deviceCount, 35, 0, "checked");
+					addDevice(value, deviceCount, test[1].humidity, 0, "checked");
 					controlDevice(deviceCount);
+					deleteDevice(deviceCount-1);
 					break;
 				case 'Air-Conditioner':
 					addDevice(value, deviceCount, 0, 0, "");
 					controlDevice(deviceCount);
+					deleteDevice(deviceCount-1);
 					break;
 				case 'Heating Equipment':
 					addDevice(value, deviceCount, 0, 0, "");
 					controlDevice(deviceCount);
+					deleteDevice(deviceCount-1);
 					break;
 				case 'Nebulizer':
 					addDevice(value, deviceCount, 0, 0, "");
 					controlDevice(deviceCount);
+					deleteDevice(deviceCount-1);
 					break;
 				case 'Dehumidifier':
 					addDevice(value, deviceCount, 0, 0, "");
-					controlDevice(deviceCount);               
+					controlDevice(deviceCount);
+					deleteDevice(deviceCount-1);               
 					break;
 			}
 			deviceCount++;
@@ -197,22 +208,23 @@ $(document).ready(function(){
 
 	function addDevice(deviceName, deviceCount, temperature, humidity, state){
 		$(".roomDetailTable").append(
-  			"<tr class = 'row"+deviceCount+"'>"
+  			"<tr class = 'row"+deviceCount+" device"+deviceCount+"'>"
   				+ "<td class = 'deviceNameCol'>"
 	  				+ "<input type='text' placeholder = '"+deviceName+"' id='devicesName' class='form-control deviceName"+deviceCount+"'>"
 	  				+ "<input type='hidden' class='IPDevice"+deviceCount+"'>"
   				+ "</td>"
+
   				+ "<td class = 'temperatureCol'>"
-  					+ "<p class = 'temperature'>"+temperature+"</p>"
+  					+ "<p class = 'temperature'>"+temperature+"°C</p>"
   				+ "</td>"
 
   				+ "<td class = 'humidityCol'>"
-  					+ "<p class = 'humidity'>"+humidity+"</p>"
+  					+ "<p class = 'humidity'>"+humidity+"%</p>"
   				+ "</td>"
 
   				+ "<td class = 'stateCol'>"
 	  				+ "<lable class='bs-switch sm-switch"+deviceCount+"'>"
-	  					+ "<input type = 'checkbox' class = 'test"+deviceCount+"' "+state+">"
+	  					+ "<input type = 'checkbox' class = 'switch"+deviceCount+"' "+state+">"
 	  					+ "<span class = 'slider round'></span>"
 	  				+ "</lable>"
   				+ "</td>"
@@ -225,10 +237,10 @@ $(document).ready(function(){
 
 	function controlDevice(deviceCount){
 		$(".sm-switch"+deviceCount).click(function(){
-			if($(".test"+deviceCount).is(':checked'))
-				$(".test"+deviceCount).attr("checked", false);
+			if($(".switch"+deviceCount).is(':checked'))
+				$(".switch"+deviceCount).attr("checked", false);
 			else
-				$(".test"+deviceCount).attr("checked", true);
+				$(".switch"+deviceCount).attr("checked", true);
 		});
 	}
 
@@ -290,20 +302,17 @@ $(document).ready(function(){
 		$("."+nameDecive).val(value);
 	}
 
-	// function getTempatureHumidity(){
+	function getTempatureHumidity(){
 		var temperture_humidity;
 		$.ajax({
-			method: "get",
-			url: "http://api.openweathermap.org/data/2.5/weather?q=Ho%20Chi%20Minh%20City,VN&APPID=efe6e214a09caa3cd0319cef3384a9fd&units=metric",
-			async: false,
-			contentType: "application/json"
+			async:false,
+			url: "https://api.openweathermap.org/data/2.5/weather?q=Ho%20Chi%20Minh%20City,VN&APPID=efe6e214a09caa3cd0319cef3384a9fd&units=metric"
 		}).done(function(data, textStatus, xhr){
 			var temperHumi = '[{"temperature":"'+data.main.temp+'"}, {"humidity": "'+data.main.humidity+'"}]';
 			temperture_humidity = JSON.parse(temperHumi);
-			alert(temperture_humidity);
 		});
-		return 
-	// }
+		return temperture_humidity;
+	}
 
   	$(".add-btn").click(function(){
   		appendRoom(loadRoom + 1);
