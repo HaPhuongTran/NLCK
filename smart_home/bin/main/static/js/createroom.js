@@ -1,4 +1,5 @@
-$(document).ready(function(){
+
+ $(document).ready(function(){
 
 	$(".roomDetail").load("detailroom.html");
 	$(".tableDecive").load("componentroom.html", function(){
@@ -114,24 +115,42 @@ $(document).ready(function(){
 
 	function saveDevice(){
 		$(".btn-saveDevice").click(function(){
+			getDeviceSave();
+		});
+//		$(".btn-saveDevice").click(
+//			$.ajax({
+//				method: "post",
+//				contentType: "application/json",
+//				url:"",
+//				data: getDeviceSave()
+//			}).done(function(){
+//
+//			})
+//		);
+	}
 
+	function getDeviceSave(){
+		var listDevice = [];
+		for(var tablecount = 0; tablecount<($(".Device tr").length -1); tablecount++){
+			var tempListDevice = JSON.parse('{"ip": "'+$(".IP").val()+'" , "nameDecive": "'+$("#devicesName").val()+'", "roomId": "'+dataRoomGet+'"}');
+			listDevice.push(tempListDevice);
+		}
+		return listDevice;
+	}
+
+	function deleteDevice(deviceCount){
+		$(".delete-btn"+deviceCount).click(function(){
+			$("#device"+deviceCount).remove();
 		});
 	}
-	//tomorrow
-	// function deleteDevice(deviceCount){
-	// 	$(".delete-btn"+deviceCount).click(function(){
-	// 		$(".device"+deviceCount).remove();
-	// 	});
-	// }
-
 
 	function getRoom(getRoomCount){
 	    $.ajax({
 		async : false,
 		method: "get",
 		contentType: "application/json",
-		url: "http://localhost:8080/smarthome/getroom/"+ nameRoom,
-		}).done(function(data, textStatus, xhr){
+		url: "http://localhost:8080/smarthome/getroom/"+ nameRoom
+	    }).done(function(data, textStatus, xhr){
 			dataRoomGet = data;
 		});
 		// Set value for fields value 
@@ -142,8 +161,9 @@ $(document).ready(function(){
 
 	function roomDetail(roomDetailCount){
 		$(".detail"+roomDetailCount).click(function(){
-			$(".roomName").html($(".nameroom"+ roomDetailCount).val());
-			upAndDown();
+			nameRoom = $(".nameroom"+roomDetailCount).val();
+			getRoom(roomDetailCount);
+			$(".roomName").html($(".nameroom"+ dataRoomGet.nameRoom).val());
 		});
 	}
 
@@ -151,9 +171,12 @@ $(document).ready(function(){
 		$(".btn-ok").click(function(){
 			if(($('.Device tr').length - 1)>0){
 				addcomponent($('.Device tr').length - 1);
+				upAndDown();
 			}else{
 				addcomponent(0);
+				upAndDown();
 			}
+			saveDevice();
 		});
 	}
 
@@ -173,32 +196,32 @@ $(document).ready(function(){
 				case 'Humidity Device':
 					addDevice(value, deviceCount, 0, test[0].temperature , "checked");
 					controlDevice(deviceCount);
-					deleteDevice(deviceCount-1);
+					deleteDevice(deviceCount);
 					break;
 				case 'Temperature Device':
 					addDevice(value, deviceCount, test[1].humidity, 0, "checked");
 					controlDevice(deviceCount);
-					deleteDevice(deviceCount-1);
+					deleteDevice(deviceCount);
 					break;
 				case 'Air-Conditioner':
 					addDevice(value, deviceCount, 0, 0, "");
 					controlDevice(deviceCount);
-					deleteDevice(deviceCount-1);
+					deleteDevice(deviceCount);
 					break;
 				case 'Heating Equipment':
 					addDevice(value, deviceCount, 0, 0, "");
 					controlDevice(deviceCount);
-					deleteDevice(deviceCount-1);
+					deleteDevice(deviceCount);
 					break;
 				case 'Nebulizer':
 					addDevice(value, deviceCount, 0, 0, "");
 					controlDevice(deviceCount);
-					deleteDevice(deviceCount-1);
+					deleteDevice(deviceCount);
 					break;
 				case 'Dehumidifier':
 					addDevice(value, deviceCount, 0, 0, "");
 					controlDevice(deviceCount);
-					deleteDevice(deviceCount-1);               
+					deleteDevice(deviceCount);               
 					break;
 			}
 			deviceCount++;
@@ -208,10 +231,13 @@ $(document).ready(function(){
 
 	function addDevice(deviceName, deviceCount, temperature, humidity, state){
 		$(".roomDetailTable").append(
-  			"<tr class = 'row"+deviceCount+" device"+deviceCount+"'>"
+  			"<tr class = 'row"+deviceCount+"' id = 'device"+deviceCount+"'>"
+  				+ "<td class = 'ipDevice'>"
+  					+ "<input type='text' placeholder ='0.0.0.0' class='form-control IP IPDevice"+deviceCount+"'>"
+  				+ "</td>"
+
   				+ "<td class = 'deviceNameCol'>"
 	  				+ "<input type='text' placeholder = '"+deviceName+"' id='devicesName' class='form-control deviceName"+deviceCount+"'>"
-	  				+ "<input type='hidden' class='IPDevice"+deviceCount+"'>"
   				+ "</td>"
 
   				+ "<td class = 'temperatureCol'>"
