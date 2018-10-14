@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.sm.entity.HomeProject;
 import com.sm.entity.Rooms;
 import com.sm.service.RoomService;
 
@@ -44,11 +44,11 @@ public class RoomController {
 	}
 	
 	@RequestMapping(value = "/getlistrooms/{name_home}", method = RequestMethod.GET, headers="Accept=application/json")
-	public List<Rooms> getListRoomByIdHome(@PathVariable("name_home") String name_home){
-		return roomService.getListRooms(name_home);
+	public List<Rooms> getListRoomByHome(@RequestBody HomeProject home){
+		return roomService.getListRooms(home);
 	}
 	
-	@RequestMapping(value = "/deleteroom", method = RequestMethod.POST, headers="Accept=application/json")
+	@RequestMapping(value = "/deleteroom", method = RequestMethod.DELETE, headers="Accept=application/json")
 	public ResponseEntity<HttpStatus> deleteRoom(@RequestBody Rooms room){
 		roomService.deleteRoom (room);
 		return new ResponseEntity<>(HttpStatus.OK);

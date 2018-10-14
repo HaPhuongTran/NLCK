@@ -1,5 +1,6 @@
 package com.sm.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,16 @@ public class DeviceServiceImpl implements DeviceService {
 	
 	@Override
 	@Transactional
-	public void save(List<Device> devices) {
-		deviceDao.save(devices);
+	public void saveOrUpdate(List<Device> devices) {
+		List<Device> devicesave = new ArrayList<Device>();
+		for (Device device : devices) {
+			if(device.getNameDevice().length()>0 && device.getIp().length()>0) {
+				devicesave.add(device);
+			}
+			else {
+			}
+		}
+		deviceDao.saveOrUpdate(devicesave);
 	}
 
 }

@@ -15,15 +15,21 @@ public class Device {
 	@Column(name = "ip", nullable = false, unique = true)
 	private String ip;
 	
-	@Column(name = "name", unique = true, nullable = false)
+	@Column(name = "name", nullable = false)
 	private String nameDevice;
 	
-	@Column(name = "state", nullable = false)
+	@Column(name = "state")
 	private String state = "off";
 
 	@ManyToOne
 	@JoinColumn(name = "id_room", nullable = false)
 	private Rooms roomId;
+	
+	public Device(){}
+	
+	public Device(String ip) {
+		this.ip = ip;
+	}
 
 	public String getIp() {
 		return ip;

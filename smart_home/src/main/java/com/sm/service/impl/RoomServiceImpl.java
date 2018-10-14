@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sm.dao.HomeDao;
 import com.sm.dao.RoomDao;
+import com.sm.entity.HomeProject;
 import com.sm.entity.Rooms;
 import com.sm.service.RoomService;
 
@@ -19,24 +21,28 @@ public class RoomServiceImpl implements RoomService {
 	@Autowired
     RoomDao roomDao;
 	
+	@Autowired
+	HomeDao homeDao;
+	
 	@Transactional
 	@Override
 	public void createRoom(Rooms room) {
-		int exit =0;
-		List<Rooms> listRooms = roomDao.getListRooms(room.getHomeId().getNameHome());
-		if(listRooms.size() > 0) {
-			for(int i =0; i<listRooms.size(); i++) {
-				if(listRooms.get(i).getNameRoom() == room.getNameRoom()){
-					exit = 1;
-				}
-			}
-			if(exit == 0) {
-				roomDao.addRoom(room);
-			}
-		}
-		else {
-			roomDao.addRoom(room);	
-		}
+		roomDao.addRoom(room);
+////		int exit =0;
+////		List<Rooms> listRooms = homeDao.getListRooms(room.getHome());
+//		if(listRooms.size() > 0) {
+//			for(int i =0; i<listRooms.size(); i++) {
+//				if(listRooms.get(i).getNameRoom() == room.getNameRoom()){
+//					exit = 1;
+//				}
+//			}
+//			if(exit == 0) {
+//				roomDao.addRoom(room);
+//			}
+//		}
+//		else {
+				
+//		}
 	}
 	
 	@Transactional
@@ -46,8 +52,8 @@ public class RoomServiceImpl implements RoomService {
 	}
 	
 	@Override
-	public List<Rooms> getListRooms(String name_home){
-		return roomDao.getListRooms(name_home);
+	public List<Rooms> getListRooms(HomeProject home){
+		return roomDao.getListRooms(home);
 	}
 	
 	@Override

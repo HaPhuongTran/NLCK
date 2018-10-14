@@ -2,8 +2,8 @@
  $(document).ready(function(){
 
 	$(".roomDetail").load("detailroom.html");
-	$(".tableDecive").load("componentroom.html", function(){
-		getDeviceHome();
+	$(".tableDevice").load("componentroom.html", function(){
+		addDeviceHome();
 	});
 
 	var getNameHome = localStorage.getItem("storageNameHome");
@@ -12,14 +12,13 @@
 	var loadRoom = 0;
 	var dataRoomGet;
 	var listRoom;
-	var nameRoom;
 	var idRoom;
 
 	$(".room-table").hide();
 
 	//Begin get home
 	$.ajax({
-		//async : false,
+		async : false,
 		method: "get",
 		contentType: "application/json",
 		url: "http://localhost:8080/smarthome/gethome/"+getNameHome,
@@ -75,26 +74,28 @@
 
 	function deleteRoom(deleteCountRoom){
 		$(".delete-btn"+deleteCountRoom).click(function(){
-			nameRoom = $(".nameroom"+ deleteCountRoom).val();
+			var nameRoom = $(".nameroom"+ deleteCountRoom).val();
 			idRoom = parseInt($(".idroom"+ deleteCountRoom).val());
-			$(".row"+deleteCountRoom).remove();
 			
 			//Begin delete room
 		    $.ajax({
-				method: "post",
+				method: "delete",
 				data: JSON.stringify({id: idRoom, nameRoom:nameRoom }),
 				contentType: "application/json",
 				url: "http://localhost:8080/smarthome/deleteroom"
 			}).done(function(data, textStatus, xhr){
 				status_create = xhr.status;
 			});
+			if(status_create == 200){
+			idRoom = parseInt($(".idroom"+ deleteCountRoom).val());
+			}
 		// //End delete room
 		});
 	}
 
 	function saveRoom(saveCount){
 		$(".btn-saveRoom"+saveCount).click(function(){
-  			nameRoom = $(".nameroom"+ saveCount).val();
+			var nameRoom = $(".nameroom"+saveCount).val();
   			idRoom = parseInt($(".idroom"+ saveCount).val());
   			if(isNaN(idRoom)|| idRoom == null){
   				idRoom = 0;
@@ -109,47 +110,50 @@
 				status_create = xhr.status;
 			});
 			//End create room
-			getRoom(saveCount);
+			// getRoom(saveCount, nameRoom);
 		});
 	}
 
 	function saveDevice(){
 		$(".btn-saveDevice").click(function(){
-			getDeviceSave();
+			$.ajax({
+				method: "post",
+				contentType: "application/json",
+				url:"http://localhost:8080/smarthome/savedevice",
+				data: JSON.stringify(getDeviceSave()) 
+			}).done(function(){
+
+			})
 		});
-//		$(".btn-saveDevice").click(
-//			$.ajax({
-//				method: "post",
-//				contentType: "application/json",
-//				url:"",
-//				data: getDeviceSave()
-//			}).done(function(){
-//
-//			})
-//		);
 	}
 
 	function getDeviceSave(){
 		var listDevice = [];
-		for(var tablecount = 0; tablecount<($(".Device tr").length -1); tablecount++){
-			var tempListDevice = JSON.parse('{"ip": "'+$(".IP").val()+'" , "nameDecive": "'+$("#devicesName").val()+'", "roomId": "'+dataRoomGet+'"}');
+		var deviceCount = $(".Device tr").length -2;
+		while(deviceCount>=0){
+			var tempListDevice = {ip:$(".IPDevice"+deviceCount).val(), nameDevice:$(".deviceName"+ deviceCount).val(),roomId: dataRoomGet};
 			listDevice.push(tempListDevice);
+			deviceCount--;
 		}
 		return listDevice;
 	}
 
 	function deleteDevice(deviceCount){
-		$(".delete-btn"+deviceCount).click(function(){
+		$(".deletedevice-btn"+deviceCount).click(function(){
+			$.ajax({
+				url:"",
+				method:"delete"
+			});
 			$("#device"+deviceCount).remove();
 		});
 	}
 
-	function getRoom(getRoomCount){
+	function getRoom(getRoomCount, nameroom){
 	    $.ajax({
 		async : false,
 		method: "get",
 		contentType: "application/json",
-		url: "http://localhost:8080/smarthome/getroom/"+ nameRoom
+		url: "http://localhost:8080/smarthome/getroom/"+ nameroom
 	    }).done(function(data, textStatus, xhr){
 			dataRoomGet = data;
 		});
@@ -161,23 +165,21 @@
 
 	function roomDetail(roomDetailCount){
 		$(".detail"+roomDetailCount).click(function(){
-			nameRoom = $(".nameroom"+roomDetailCount).val();
-			getRoom(roomDetailCount);
-			$(".roomName").html($(".nameroom"+ dataRoomGet.nameRoom).val());
+			getRoom(roomDetailCount, $(".nameroom"+roomDetailCount).val());
+			$(".roomName").html(dataRoomGet.nameRoom);
 		});
 	}
 
-	function getDeviceHome(){
+	function addDeviceHome(){
 		$(".btn-ok").click(function(){
 			if(($('.Device tr').length - 1)>0){
 				addcomponent($('.Device tr').length - 1);
-				upAndDown();
 			}else{
 				addcomponent(0);
-				upAndDown();
 			}
 			saveDevice();
 		});
+		upAndDown();
 	}
 
 	function addcomponent(deviceCount){
@@ -194,12 +196,12 @@
 		$.each(componentArray, function(index, value){
 			switch(value){
 				case 'Humidity Device':
-					addDevice(value, deviceCount, 0, test[0].temperature , "checked");
+					addDevice(value, deviceCount, 0, test[0].temperature , "");
 					controlDevice(deviceCount);
 					deleteDevice(deviceCount);
 					break;
 				case 'Temperature Device':
-					addDevice(value, deviceCount, test[1].humidity, 0, "checked");
+					addDevice(value, deviceCount, test[1].humidity, 0, "");
 					controlDevice(deviceCount);
 					deleteDevice(deviceCount);
 					break;
@@ -233,11 +235,11 @@
 		$(".roomDetailTable").append(
   			"<tr class = 'row"+deviceCount+"' id = 'device"+deviceCount+"'>"
   				+ "<td class = 'ipDevice'>"
-  					+ "<input type='text' placeholder ='0.0.0.0' class='form-control IP IPDevice"+deviceCount+"'>"
+  					+ "<input type='text' placeholder ='0.0.0.0' class='form-control IPDevice"+deviceCount+"'>"
   				+ "</td>"
 
   				+ "<td class = 'deviceNameCol'>"
-	  				+ "<input type='text' placeholder = '"+deviceName+"' id='devicesName' class='form-control deviceName"+deviceCount+"'>"
+	  				+ "<input type='text' placeholder = '"+deviceName+"' ' class='form-control deviceName"+deviceCount+"'>"
   				+ "</td>"
 
   				+ "<td class = 'temperatureCol'>"
@@ -256,7 +258,7 @@
   				+ "</td>"
 
   				+ "<td class = 'closecol'>"
-	  				+ "<a><i class='fa fa-times mx-1 delete-btn"+deviceCount+"'></i></a>"
+	  				+ "<a><i class='fa fa-times mx-1 deletedevice-btn"+deviceCount+"'></i></a>"
   				+ "</td>"
   			+"</tr>");
 	}
@@ -345,7 +347,7 @@
  		saveRoom(loadRoom + 1);
  		deleteRoom(loadRoom + 1);
  		roomDetail(loadRoom + 1);
- 		getDeviceHome();
+ 		addDeviceHome();
 		loadRoom++;
   	});
 });
