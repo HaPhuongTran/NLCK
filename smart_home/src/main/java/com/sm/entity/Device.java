@@ -1,5 +1,6 @@
 package com.sm.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,7 +13,7 @@ import javax.persistence.Table;
 public class Device {
 	
 	@Id
-	@Column(name = "ip", nullable = false, unique = true)
+	@Column(name = "ip", nullable = false)
 	private String ip;
 	
 	@Column(name = "name", nullable = false)
@@ -21,8 +22,8 @@ public class Device {
 	@Column(name = "state")
 	private String state = "off";
 
-	@ManyToOne
-	@JoinColumn(name = "id_room", nullable = false)
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "id_room", referencedColumnName = "id", nullable = false)
 	private Rooms roomId;
 	
 	public Device(){}
@@ -61,7 +62,5 @@ public class Device {
 
 	public void setRoomId(Rooms roomId) {
 		this.roomId = roomId;
-	}
-
-	
+	}	
 }

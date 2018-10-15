@@ -27,12 +27,12 @@ public class HomeDaoImpl implements HomeDao {
 	}
 	
 	public HomeProject getHome(String nameHome) {
-		Session session = sessionFactory.getCurrentSession();
-		Criteria crHome = session.createCriteria(HomeProject.class);
-		Criteria crHomeKey = crHome.createCriteria("homePrimaryKey");
-		crHomeKey.add(Restrictions.eq("homePrimaryKey.name",nameHome));
-		HomeProject home = (HomeProject) crHomeKey.uniqueResult();
-		return home;
+//		Session session = sessionFactory.getCurrentSession();
+//		Criteria crHome = session.createCriteria(HomeProject.class);
+//		Criteria crHomeKey = crHome.createCriteria("homePrimaryKey");
+//		crHomeKey.add(Restrictions.eq("homePrimaryKey.name",nameHome));
+//		HomeProject home = (HomeProject) crHomeKey.uniqueResult();
+		return null;
 	}
 
 	@Override

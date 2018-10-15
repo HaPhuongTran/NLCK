@@ -27,13 +27,10 @@ public class Rooms{
 	private int id;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumns({
-		@JoinColumn(name = "home_id", referencedColumnName = "id"),
-		@JoinColumn(name = "home_name", referencedColumnName = "name")
-	})
-	private HomeProject homePrimaryKey;
+	@JoinColumn(name = "home_id", referencedColumnName = "id")
+	private HomeProject home;
 	
-	@Column(name = "name_room", nullable = false, unique = true)
+	@Column(name = "name_room", nullable = false)
 	private String nameRoom;
 	
 	@OneToMany(mappedBy = "roomId", fetch = FetchType.EAGER)
@@ -48,30 +45,30 @@ public class Rooms{
 	public int getId() {
 		return id;
 	}
-	
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	@JsonIgnore
-	public HomeProject getHomePrimaryKey() {
-		return homePrimaryKey;
+	public HomeProject getHome() {
+		return home;
+	}
+
+	public void setHome(HomeProject home) {
+		this.home = home;
 	}
 
 	public String getNameRoom() {
 		return nameRoom;
 	}
 
-	public List<Device> getDevices() {
-		return devices;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public void setHomePrimaryKey(HomeProject homePrimaryKey) {
-		this.homePrimaryKey = homePrimaryKey;
-	}
-
 	public void setNameRoom(String nameRoom) {
 		this.nameRoom = nameRoom;
+	}
+
+	public List<Device> getDevices() {
+		return devices;
 	}
 
 	public void setDevices(List<Device> devices) {
