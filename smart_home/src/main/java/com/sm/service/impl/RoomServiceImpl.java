@@ -23,7 +23,7 @@ public class RoomServiceImpl implements RoomService {
 	@Override
 	public void createRoom(Rooms room) {
 		int exit =0;
-		List<Rooms> listRooms = roomDao.getListRooms(room.getHomeId().getNameHome());
+		List<Rooms> listRooms = roomDao.getListRooms(room.getNameRoom());
 		if(listRooms.size() > 0) {
 			for(int i =0; i<listRooms.size(); i++) {
 				if(listRooms.get(i).getNameRoom() == room.getNameRoom()){

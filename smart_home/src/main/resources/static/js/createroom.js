@@ -29,25 +29,25 @@
 	//End get Home
 
 
-	//Begin list room
-	$.ajax({
-		async : false,
-		method: "get",
-		contentType: "application/json",
-		url: "http://localhost:8080/smarthome/getlistrooms/"+ getNameHome,
-	}).done(function(data, textStatus, xhr){
-		listRoom = data;
-	});
-	//End get list room
+	// //Begin list room
+	// $.ajax({
+	// 	async : false,
+	// 	method: "get",
+	// 	contentType: "application/json",
+	// 	url: "http://localhost:8080/smarthome/getlistrooms/"+ getNameHome,
+	// }).done(function(data, textStatus, xhr){
+	// 	listRoom = data;
+	// });
+	// //End get list room
 
-	for(loadRoom; loadRoom < listRoom.length; loadRoom++){
-		appendRoom(loadRoom);
-		$(".nameroom"+loadRoom).val(listRoom[loadRoom].nameRoom);
-		$(".idroom"+loadRoom).val(listRoom[loadRoom].id);
-		saveRoom(loadRoom);
-		deleteRoom(loadRoom);
-		roomDetail(loadRoom);
-	}
+	// for(loadRoom; loadRoom < listRoom.length; loadRoom++){
+	// 	appendRoom(loadRoom);
+	// 	$(".nameroom"+loadRoom).val(listRoom[loadRoom].nameRoom);
+	// 	$(".idroom"+loadRoom).val(listRoom[loadRoom].id);
+	// 	saveRoom(loadRoom);
+	// 	deleteRoom(loadRoom);
+	// 	roomDetail(loadRoom);
+	// }
 
 	function appendRoom(countRoom){
   		$(".table-room").append(

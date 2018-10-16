@@ -1,6 +1,5 @@
 package com.sm.dao.impl;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 
 import java.util.List;
 
