@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sm.dao.AccountDao;
 import com.sm.entity.Account;
 import com.sm.exception.SMException;
 import com.sm.service.AccountService;
@@ -21,13 +22,16 @@ public class AccountController {
 	@Autowired
 	AccountService accountService;
 	
+	@Autowired
+	AccountDao accountDao;
+	
 	@RequestMapping(value = "/createaccount", method = RequestMethod.POST, headers="Accept=application/json")
-	public ResponseEntity<HttpStatus> createAccount(@RequestBody Account account) throws SMException{
-		try {
+	public ResponseEntity<HttpStatus> createAccount(@RequestBody Account account){
+		if(accountService.isExistAccount(account)) {
 			accountService.createAccount(account);
 			return new ResponseEntity<>(HttpStatus.CREATED);
-		} catch (SMException e) {
-			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	

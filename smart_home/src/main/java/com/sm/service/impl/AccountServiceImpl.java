@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sm.dao.AccountDao;
 import com.sm.entity.Account;
-import com.sm.exception.SMException;
 import com.sm.service.AccountService;
 
 @Service
@@ -19,18 +18,20 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional
-	public void createAccount(Account account) throws SMException {
-		Account checkAccount = accountDao.getAccountByName(account.getUserName());
-		if(checkAccount == null)
+	public void createAccount(Account account) {
 			accountDao.createAccount(account);
-		else {
-			throw new SMException("The username is existed.");
-		}
 	}
 
 	@Override
 	public Account getAccountByName(String account) {
 		return accountDao.getAccountByName(account);
+	}
+
+	@Override
+	public Boolean isExistAccount(Account account) {
+		if(accountDao.getAccountByName(account.getUserName()) == null)
+			return true;
+		else return false;
 	}
 
 }
