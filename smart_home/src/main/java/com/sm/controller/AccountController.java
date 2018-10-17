@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sm.dao.AccountDao;
 import com.sm.entity.Account;
-import com.sm.exception.SMException;
 import com.sm.service.AccountService;
 
 @RestController
@@ -31,7 +30,7 @@ public class AccountController {
 			accountService.createAccount(account);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}else {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 	}
 	
@@ -39,4 +38,16 @@ public class AccountController {
 	public Account getAccountByName(@PathVariable("account_name") String accountName){
 		return accountService.getAccountByName(accountName);
 	}
+	
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public ResponseEntity<HttpStatus>Login(@RequestBody Account account){
+		if(!accountService.isExistAccount(account)) {
+			return new ResponseEntity<>(HttpStatus.FOUND);
+		}
+		else {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+	}
+		
+
 }
