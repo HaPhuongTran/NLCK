@@ -19,37 +19,40 @@
 	  <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
 </head>
 <body>
-<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".modalPoll">Launch modal</button>
- -->
-		<a class='trigger info-color text-white' data-toggle="modal" data-target=".modalPoll" >Detail<i class='fa fa-plus ml-2'></i></a>
-<!-- Full Height Modal Right -->
-<div class="modal fade right modalPoll"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
-    <!-- Add class .modal-full-height and then add class .modal-right (or other classes from list above) to set a position to the modal -->
-    <div class="modal-dialog modal-full-height modal-right" role="document">
+<!-- <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Sign in</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+                <div class="md-form mb-5">
+                    <i class="fa fa-envelope prefix grey-text"></i>
+                    <input type="email" id="defaultForm-email" class="form-control validate">
+                    <label data-error="wrong" data-success="right" for="defaultForm-email">Your email</label>
+                </div>
 
+                <div class="md-form mb-4">
+                    <i class="fa fa-lock prefix grey-text"></i>
+                    <input type="password" id="defaultForm-pass" class="form-control validate">
+                    <label data-error="wrong" data-success="right" for="defaultForm-pass">Your password</label>
+                </div>
 
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title w-100" id="myModalLabel">Modal title</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button class="btn btn-default">Login</button>
+            </div>
         </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer justify-content-center">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
     </div>
-  </div>
-  <!-- Full Height Modal Right -->
-<!-- <script type="text/javascript">
-	$('.modalPoll').modal('handleUpdate');
-</script> -->
+<!-- </div> -->
+
+<div class="text-center">
+    <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLoginForm">Launch Modal Login Form</a>
+</div>
 <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
   <!-- Bootstrap tooltips -->
   <script type="text/javascript" src="js/popper.min.js"></script>

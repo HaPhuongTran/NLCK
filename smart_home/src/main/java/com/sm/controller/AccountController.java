@@ -41,7 +41,8 @@ public class AccountController {
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<HttpStatus>Login(@RequestBody Account account){
-		if(!accountService.isExistAccount(account)) {
+		Account accountcheck = accountService.getAccountByName(account.getUserName());
+		if(accountcheck!=null && accountcheck.getPassword().equals(account.getPassword())) {
 			return new ResponseEntity<>(HttpStatus.FOUND);
 		}
 		else {

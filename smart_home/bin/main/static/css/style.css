@@ -60,3 +60,9 @@ h6 {
   background-size: cover;
   background-position: center center;
 }
+
+.anncounce{
+  padding-left: 20%;
+  color: red;
+  display: none;
+}
