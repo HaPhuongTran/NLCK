@@ -18,13 +18,21 @@ public class HomeServiceImpl implements HomeService {
 	@Autowired
     HomeDao homeDao;
 	
+	@Override
 	@Transactional
 	public void createHome(HomeProject homeProject) {
 		homeDao.addHome(homeProject);	
 	}
 	
-	@Transactional
+	@Override
 	public HomeProject getHome(String nameHome) {
 		return homeDao.getHome(nameHome);
+	}
+
+	@Override
+	@Transactional
+	public void DeleteHome(int idHome) {
+		homeDao.DeleteHome(idHome);
+		
 	}
 }

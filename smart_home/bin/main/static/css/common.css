@@ -46,3 +46,8 @@ header{
 .sm-navbar{
   margin-left: 60%;
 }
+.anncounce{
+  text-align: center;
+  color: red;
+  display: none;
+}

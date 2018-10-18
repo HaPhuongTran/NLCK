@@ -39,7 +39,8 @@ $(document).ready(function(){
 				document.location.href = "newhome.html";
 			}
 			else{
-				$(".modal-content p").attr('display', '');//review here
+				$("p.anncounce").css("display", "block");
+				$("p.anncounce").removeAttr("text-align");
 			}
 		});
 	}
