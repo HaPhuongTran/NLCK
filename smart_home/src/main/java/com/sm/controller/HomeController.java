@@ -32,11 +32,15 @@ public class HomeController {
 		Account account = accountService.getAccountByName(user_name);
 		homeProject.setAccount(account);
 		HomeProject homeCheck = homeService.getHome(homeProject.getNameHome());
-		if(homeCheck != null) {
-			return new ResponseEntity<>(HttpStatus.FOUND);
+		if(account!=null) {
+			if(homeCheck != null) {
+				return new ResponseEntity<>(HttpStatus.FOUND);
+			}else {
+				homeService.createHome(homeProject);
+		        return new ResponseEntity<>(HttpStatus.CREATED);
+			}
 		}else {
-			homeService.createHome(homeProject);
-	        return new ResponseEntity<>(HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 	

@@ -14,7 +14,7 @@ $(document).ready(function(){
 		setHomeName();
 	});
 	var listHome = getUser(getUserName).home;
-	for(homenum; homenum<listHome.length; homenum++){
+	for(homenum; homenum<listHome.lenght; homenum++){
 		appendHome(homenum,listHome[homenum].nameHome);
 		$(".nameHome"+homenum).val(listHome[homenum].nameHome);
 		$(".idHome"+homenum).val(listHome[homenum].idHome);
